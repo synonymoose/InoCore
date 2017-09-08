@@ -1,14 +1,27 @@
-SET @BP_ENTRY   = 951;
-SET @SI_ENTRY   = 49869;
-SET @BBW_ENTRY  = 49871;
-SET @MMCB_ENTRY = 197;
-SET @SIS_ENTRY  = 50047;
-SET @GA_ENTRY   = 50039;
-SET @H_ENTRY    = 448;
-SET @LN_ENTRY   = 61837;
-SET @SAR_ENTRY  = 42216;
+SET @BP_ENTRY     = 951;
+SET @SI_ENTRY     = 49869;
+SET @BBW_ENTRY    = 49871;
+SET @MMCB_ENTRY   = 197;
+SET @SIS_ENTRY    = 50047;
+SET @GA_ENTRY     = 50039;
+SET @H_ENTRY      = 448;
+SET @LN_ENTRY     = 61837;
+SET @SAR_ENTRY    = 42216;
 SET @WOLF_ENTRY_1 = 43291;
 SET @WOLF_ENTRY_2 = 43292;
+SET @MAGE_ENTRY   = 53836;
+
+DELETE FROM `creature` WHERE `guid`=11598421;
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`MovementType`) VALUES
+(11598421, @MAGE_ENTRY, 0, 1, -8959, -147, 81.5134, 3.76123, 300, 0, 0);
+UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry`=@MAGE_ENTRY;
+DELETE FROM `smart_scripts` WHERE (`entryorguid`=-11598421 AND `source_type`=0);
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
+(-11598421, 0, 0, 0, 1, 0, 100, 0, 4200, 6700, 5100, 6400, 11, 167677, 0, 0, 0, 0, 0, 10, 18253, 44548, 0, 0, 0, 0, 0, "Stormwind Mage - On Reset - Summon Water Elemental"),
+(-11598421, 0, 1, 0, 1, 0, 100, 0, 7400, 7900, 6700, 7100, 11, 166991, 0, 0, 0, 0, 0, 10, 18253, 44548, 0, 0, 0, 0, 0, "Stormwind Mage - On Reset - Summon Water Elemental");
+DELETE FROM `creature_template_addon` WHERE `entry`=@MAGE_ENTRY;
+INSERT INTO `creature_template_addon` (`entry`,`bytes1`,`bytes2`,`emote`,`auras`) VALUES
+(@MAGE_ENTRY, 0, 257, 474, '69787');
 
 DELETE FROM `creature_equip_template` WHERE `entry`=@BP_ENTRY;
 INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
