@@ -42,6 +42,12 @@ enum Northshire
     NPC_STORMWIND_INFANTRY    = 49869,
 
     SAY_YELL                  = 1,
+
+    SPELL_RENEWEDLIFE         = 93097,
+
+    ACTION_HEAL               = 1,
+    EVENT_HEALED_1            = 1,
+    EVENT_HEALED_2            = 2,
 };
 
 /*######
@@ -180,8 +186,6 @@ public:
 ## npc_stormwind_injured_soldier
 ######*/
 
-#define SPELL_HEAL          93072
-
 class npc_stormwind_injured_soldier : public CreatureScript
 {
 public:
@@ -194,22 +198,96 @@ public:
 
     struct npc_stormwind_injured_soldierAI : public ScriptedAI
     {
-        npc_stormwind_injured_soldierAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_stormwind_injured_soldierAI(Creature* creature) : ScriptedAI(creature) { }
+
+        EventMap events;
+        Player* owner;
 
         void Reset()
-        {}
-
-        void OnSpellClick(Unit* Clicker)
         {
-            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-            me->RemoveFlag(UNIT_FIELD_BYTES_1, UNIT_STAND_STATE_DEAD);
-            me->ForcedDespawn(2000);
-            me->SetRespawnDelay(10);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_14);
+            //me->SetUInt32Value(UNIT_FIELD_BYTES_1, 7);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void SpellHit(Unit* caster, SpellInfo const* spell)
         {
-            return;
+            if (spell->Id == SPELL_RENEWEDLIFE)
+            {
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_14);
+                //me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                DoAction(ACTION_HEAL);
+                owner = me->FindNearestPlayer(8.0f, true);
+            }
+        }
+
+        void DoAction(int32 const action)
+        {
+            switch (action)
+            {
+                case ACTION_HEAL:
+                    events.ScheduleEvent(EVENT_HEALED_1, 2 * IN_MILLISECONDS);
+                    break;
+            }
+        }
+
+        void UpdateAI(uint32 const diff)
+        {
+            events.Update(diff);
+
+            while (uint32 eventId = events.ExecuteEvent())
+            {
+                switch (eventId)
+                {
+                    case EVENT_HEALED_1:
+                    {
+                        if (owner)
+                        {
+                            switch(urand(0, 5))
+                            {
+                                case 0:
+                                    me->MonsterSay("I will fear no evil!", 0, NULL);
+                                    break;
+                                case 1:
+                                    me->MonsterSay("I... I'm okay! I'm okay!", 0, NULL);
+                                    break;
+                                case 2:
+                                    me->MonsterSay("Bless you, hero!", 0, NULL);
+                                    break;
+                                case 3:
+                                    me->MonsterSay("You are $p! The hero that everyone has been talking about! Thank you!", 0, owner->GetGUID());
+                                    break;
+                                case 4:
+                                    me->MonsterSay("Thank the Light!", 0, NULL);
+                                    break;
+                                case 5:
+                                    me->MonsterSay("I live to fight another day!", 0, NULL);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            me->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
+                            owner->KilledMonsterCredit(me->GetEntry(), NULL);
+                            events.ScheduleEvent(EVENT_HEALED_2, 2.5 * IN_MILLISECONDS);
+                        }
+                        break;
+                    }
+
+                    case EVENT_HEALED_2:
+                    {
+                        me->GetMotionMaster()->MovePoint(0, -8914.525f, -133.963f, 80.534f);
+                        me->DespawnOrUnsummon(8 * IN_MILLISECONDS);
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
+            }
         }
     };
 };
