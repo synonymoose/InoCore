@@ -16,11 +16,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/*######
-## npc_stormwind_infantry
-######*/
-
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
@@ -41,7 +36,17 @@
 #include "Player.h"
 #include "SpellScript.h"
 
-#define NPC_WOLF    49871
+enum Northshire
+{
+    NPC_BLACKROCK_BATTLE_WORG = 49871,
+    NPC_STORMWIND_INFANTRY    = 49869,
+
+    SAY_YELL                  = 1,
+};
+
+/*######
+## npc_stormwind_infantry
+######*/
 
 class npc_stormwind_infantry : public CreatureScript
 {
@@ -59,19 +64,24 @@ public:
 
         bool HasATarget;
 
+        uint32 tYell, SayChance, WillSay;
+
         void Reset()
         {
             HasATarget = false;
+            WillSay     = urand(0, 45);
+            SayChance   = 25;			
+            tYell       = urand(28.5 * IN_MILLISECONDS, 51.3 * IN_MILLISECONDS);
         }
 
-        void DamageTaken(Unit* doneBy, uint32& damage)
+        void DamageTaken(Unit* doneBy, uint32& damage, SpellInfo const*  /*p_SpellInfo*/)
         {
             if (doneBy->ToCreature())
                 if (me->GetHealth() <= damage || me->GetHealthPct() <= 80.0f)
                     damage = 0;
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& damage, DamageEffectType /*damageType*/)
         {
             if (target->ToCreature())
                 if (target->GetHealth() <= damage || target->GetHealthPct() <= 70.0f)
@@ -83,13 +93,85 @@ public:
             if (who && !HasATarget)
                 if (me->GetDistance(who) < 5.0f)
                     if (Creature* creature = who->ToCreature())
-                        if (creature->GetEntry() == NPC_WOLF)
+                        if (creature->GetEntry() == NPC_BLACKROCK_BATTLE_WORG)
                             AttackStart(who);
         }
 
         void EnterEvadeMode()
         {
             HasATarget = false;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (me->isInCombat() && me->FindNearestCreature(NPC_BLACKROCK_BATTLE_WORG, 6.0f, true))
+            {
+                if(tYell <= diff) 
+                {
+                    if (WillSay <= SayChance)
+                    {			   
+                        Talk(SAY_YELL);
+                        tYell = urand(28.5 * IN_MILLISECONDS, 51.3 * IN_MILLISECONDS);          
+                    }			   
+                }
+                else tYell -= diff;
+            }
+
+            if (!UpdateVictim())
+                return;
+            else
+                DoMeleeAttackIfReady();
+        }
+    };
+};
+
+/*######
+## npc_blackrock_battle_worg
+######*/
+
+class npc_blackrock_battle_worg : public CreatureScript
+{
+public:
+    npc_blackrock_battle_worg() : CreatureScript("npc_blackrock_battle_worg") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_blackrock_battle_worgAI (creature);
+    }
+
+    struct npc_blackrock_battle_worgAI : public ScriptedAI
+    {
+        npc_blackrock_battle_worgAI(Creature* creature) : ScriptedAI(creature) { }
+
+        void DamageTaken(Unit* who, uint32& damage)
+        {
+            if (who->GetEntry() == NPC_STORMWIND_INFANTRY && damage >= me->GetHealth())
+                me->SetHealth(me->GetMaxHealth());
+
+            if (who->GetTypeId() == TYPEID_PLAYER || who->isPet())
+            {
+                if (Creature* guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
+                {
+                    guard->getThreatManager().resetAllAggro();
+                    guard->CombatStop(true);
+                }
+
+                me->getThreatManager().resetAllAggro();
+                me->GetMotionMaster()->MoveChase(who);
+                me->AI()->AttackStart(who);
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                if (Creature* guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
+                {
+                    me->SetReactState(REACT_AGGRESSIVE);
+                    me->AI()->AttackStart(guard);
+                }
+
+            DoMeleeAttackIfReady();
         }
     };
 };
@@ -222,6 +304,7 @@ class spell_quest_extincteur : public SpellScriptLoader
 void AddSC_elwyn_forest()
 {
     new npc_stormwind_infantry();
+    new npc_blackrock_battle_worg();
     new npc_stormwind_injured_soldier();
     new spell_quest_fear_no_evil();
     new spell_quest_extincteur();
