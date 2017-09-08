@@ -132,6 +132,11 @@ DELETE FROM `creature_equip_template` WHERE `entry`=42094;
 INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
 (42094, 1, 1899, 143, 2551);
 
+DELETE FROM `creature_equip_template` WHERE `entry`=42938;
+INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
+(42938, 1, 56117, 0, 0);
+UPDATE `creature` SET `equipment_id`=1 WHERE `id`=42938;
+
 DELETE FROM `smart_scripts` WHERE `entryorguid`=@H_ENTRY AND `source_type`=0;
 DELETE FROM `creature_text` WHERE `entry`=@H_ENTRY;
 UPDATE `creature_template` SET `AIName`="", `scriptname`="npc_hogger" WHERE `entry`=@H_ENTRY;
