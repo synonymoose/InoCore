@@ -24,9 +24,9 @@ INSERT INTO `creature_template_addon` (`entry`,`bytes1`,`bytes2`,`emote`,`auras`
 (@MAGE_ENTRY, 0, 257, 474, '69787');
 
 DELETE FROM `creature_equip_template` WHERE `entry`=@BP_ENTRY;
-INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
-(@BP_ENTRY, 1, 1907, 0, 0);
-UPDATE `creature` SET `MovementType`=0,`spawndist`=0,`equipment_id`=1 WHERE `id`=@BP_ENTRY;
+INSERT INTO `creature_equip_template` (`entry`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
+(@BP_ENTRY, 1907, 0, 0);
+UPDATE `creature` SET `MovementType`=0,`spawndist`=0,`equipment_id`=951 WHERE `id`=@BP_ENTRY;
 UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry`=@BP_ENTRY;
 DELETE FROM `smart_scripts` WHERE `entryorguid` = @BP_ENTRY AND `source_type`=0;
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
@@ -91,7 +91,6 @@ INSERT INTO `locales_creature_text` (`entry`, `textGroup`, `id`, `text_loc1`, `t
 (@SI_ENTRY, 1, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Пора вас отправить вслед за вашими грязными псами!', NULL, NULL),
 (@SI_ENTRY, 1, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Ваши ворги бессильны перед военной мощью Штормграда!', NULL, NULL);
 
-UPDATE `creature` SET `MovementType`=1,`unit_flags`=770 WHERE `guid` IN (18270, 18267, 18263, 18281, 18277, 18261, 18262, 18211, 18202, 18193, 18180, 18169, 18154, 18156, 18152);
 UPDATE `creature_template` SET `AIName`="" WHERE `entry`=@SIS_ENTRY;
 UPDATE `creature` SET `curhealth`=1 WHERE `id`=@SIS_ENTRY;
 DELETE FROM `smart_scripts` WHERE `entryorguid`=@SIS_ENTRY AND `source_type`=0;
@@ -112,30 +111,30 @@ INSERT INTO `creature_template_addon` (`entry`,`bytes1`,`bytes2`,`emote`) VALUES
 (@WOLF_ENTRY_2, 1, 1, 0);
 UPDATE `creature` SET `position_z`=99.0125 WHERE `id`=@LN_ENTRY;
 DELETE FROM `creature` WHERE `guid` IN (11598411, 11598412, 11598413, 11598414, 11598415, 11598416, 11598417, 11598418, 11598419, 11598420);
-INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `npcflag2`, `unit_flags`, `unit_flags2`, `unit_flags3`, `dynamicflags`, `WorldEffectID`, `isActive`, `protec_anti_doublet`) VALUES
-(11598411, 42059, 0, 6170, 9, 1, 1, 0, 0, -8938.35, -132.975, 82.2191, 5.42745, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598412, 42059, 0, 6170, 9, 1, 1, 0, 0, -8939.87, -134.071, 82.2103, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598413, 42059, 0, 6170, 9, 1, 1, 0, 0, -8941.13, -132.506, 82.2646, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598414, 42059, 0, 6170, 9, 1, 1, 0, 0, -8939.73, -131.37, 82.3038, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598415, 42059, 0, 6170, 9, 1, 1, 0, 0, -8941.22, -129.797, 82.4094, 5.56489, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598416, 42059, 0, 6170, 9, 1, 1, 0, 0, -8942.53, -131.052, 82.4063, 5.46672, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598417, 42094, 0, 6170, 9, 1, 1, 0, 1, -8971.18, -155.411, 81.5028, 3.86227, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598418, 42094, 0, 6170, 9, 1, 1, 0, 1, -8964.33, -155.348, 81.5031, 5.61438, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598419, 42094, 0, 6170, 9, 1, 1, 0, 1, -8968.87, -148.46, 81.5031, 1.51785, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
-(11598420, 42094, 0, 6170, 9, 1, 1, 0, 1, -8971.34, -150.209, 81.5028, 2.50353, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL);
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `npcflag2`, `unit_flags`, `unit_flags2`, `dynamicflags`, `isActive`, `protec_anti_doublet`) VALUES
+(11598411, 42059, 0, 6170, 9, 1, 1, 0, 0, -8938.35, -132.975, 82.2191, 5.42745, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598412, 42059, 0, 6170, 9, 1, 1, 0, 0, -8939.87, -134.071, 82.2103, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598413, 42059, 0, 6170, 9, 1, 1, 0, 0, -8941.13, -132.506, 82.2646, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598414, 42059, 0, 6170, 9, 1, 1, 0, 0, -8939.73, -131.37, 82.3038, 5.39211, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598415, 42059, 0, 6170, 9, 1, 1, 0, 0, -8941.22, -129.797, 82.4094, 5.56489, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598416, 42059, 0, 6170, 9, 1, 1, 0, 0, -8942.53, -131.052, 82.4063, 5.46672, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598417, 42094, 0, 6170, 9, 1, 1, 0, 1, -8971.18, -155.411, 81.5028, 3.86227, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598418, 42094, 0, 6170, 9, 1, 1, 0, 1, -8964.33, -155.348, 81.5031, 5.61438, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598419, 42094, 0, 6170, 9, 1, 1, 0, 1, -8968.87, -148.46, 81.5031, 1.51785, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL),
+(11598420, 42094, 0, 6170, 9, 1, 1, 0, 1, -8971.34, -150.209, 81.5028, 2.50353, 500, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, NULL);
 
 UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry`=42094;
 DELETE FROM `smart_scripts` WHERE (`entryorguid`=42094 AND `source_type`=0);
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
 (42094, 0, 0, 0, 1, 0, 100, 0, 1500, 5300, 1000, 4900, 10, 51, 45, 36, 54, 60, 43, 1, 0, 0, 0, 0, 0, 0, 0, "Stormwind Recruit - OOC - Play Random Emote");
 DELETE FROM `creature_equip_template` WHERE `entry`=42094;
-INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
-(42094, 1, 1899, 143, 2551);
+INSERT INTO `creature_equip_template` (`entry`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
+(42094, 1899, 143, 2551);
 
 DELETE FROM `creature_equip_template` WHERE `entry`=42938;
-INSERT INTO `creature_equip_template` (`entry`, `id`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
-(42938, 1, 56117, 0, 0);
-UPDATE `creature` SET `equipment_id`=1 WHERE `id`=42938;
+INSERT INTO `creature_equip_template` (`entry`, `itemEntry1`, `itemEntry2`, `itemEntry3`) VALUES
+(42938, 56117, 0, 0);
+UPDATE `creature` SET `equipment_id`=42938 WHERE `id`=42938;
 
 DELETE FROM `smart_scripts` WHERE `entryorguid`=@H_ENTRY AND `source_type`=0;
 DELETE FROM `creature_text` WHERE `entry`=@H_ENTRY;
