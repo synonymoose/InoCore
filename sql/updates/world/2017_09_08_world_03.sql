@@ -3,6 +3,7 @@ SET @SI_ENTRY   = 49869;
 SET @BBW_ENTRY  = 49871;
 SET @MMCB_ENTRY = 197;
 SET @SIS_ENTRY  = 50047;
+SET @GA_ENTRY   = 50039;
 SET @H_ENTRY    = 448;
 
 DELETE FROM `creature_equip_template` WHERE `entry`=@BP_ENTRY;
@@ -84,6 +85,7 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `use
 (@SIS_ENTRY, 93097, 0, 0);
 
 UPDATE `creature_template` SET `scriptname`="npc_blackrock_battle_worg" WHERE `entry`=@BBW_ENTRY;
+UPDATE `creature` SET `MovementType`=1,`spawndist`=15 WHERE `id`=@GA_ENTRY;
 DELETE FROM `creature_template_addon` WHERE `entry` IN (@MMCB_ENTRY);
 INSERT INTO `creature_template_addon` (`entry`,`bytes1`,`bytes2`,`emote`) VALUES
 (@MMCB_ENTRY, 0, 1, 483);
