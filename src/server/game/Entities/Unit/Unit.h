@@ -1454,7 +1454,7 @@ class Unit : public WorldObject
         void SendPowerUpdate(Powers power);
         void SendPowerUpdate(Powers power, int32 val);
 
-        // returns the change in power
+		// returns the change in power
         int32 ModifyPower(Powers power, int32 val, SpellInfo const* p_SpellInfo = nullptr);
         int32 ModifyPowerPct(Powers power, float pct, bool apply = true);
 
