@@ -1890,15 +1890,15 @@ Rate.Skill.Discovery = 1
 #                     1 - (Rate.Drop.Item.Referenced)
 #                     1 - (Rate.Drop.Money)
 
-Rate.Drop.Item.Poor             = 5
-Rate.Drop.Item.Normal           = 5
-Rate.Drop.Item.Uncommon         = 5
-Rate.Drop.Item.Rare             = 5
-Rate.Drop.Item.Epic             = 5
-Rate.Drop.Item.Legendary        = 5
-Rate.Drop.Item.Artifact         = 5
-Rate.Drop.Item.Referenced       = 5
-Rate.Drop.Money                 = 5
+Rate.Drop.Item.Poor             = 1
+Rate.Drop.Item.Normal           = 1
+Rate.Drop.Item.Uncommon         = 1
+Rate.Drop.Item.Rare             = 1
+Rate.Drop.Item.Epic             = 1
+Rate.Drop.Item.Legendary        = 1
+Rate.Drop.Item.Artifact         = 1
+Rate.Drop.Item.Referenced       = 1
+Rate.Drop.Money                 = 1
 
 #
 #    Rate.Drop.Item.ReferencedAmount
@@ -1917,10 +1917,10 @@ Rate.Drop.Item.ReferencedAmount = 1
 #                     1 - (Rate.XP.Quest)
 #                     1 - (Rate.XP.Explore)
 
-Rate.XP.Kill      = 5
-Rate.XP.Quest     = 5
+Rate.XP.Kill      = 1
+Rate.XP.Quest     = 1
 Rate.XP.Explore   = 1
-Rate.XP.Gathering = 5
+Rate.XP.Gathering = 1
 
 #
 #    Rate.RepairCost
@@ -1938,9 +1938,9 @@ Rate.RepairCost = 1
 #                     1 - (Rate.Rest.Offline.InTavernOrCity)
 #                     1 - (Rate.Rest.Offline.InWilderness)
 
-Rate.Rest.InGame                 = 5
-Rate.Rest.Offline.InTavernOrCity = 5
-Rate.Rest.Offline.InWilderness   = 5
+Rate.Rest.InGame                 = 1
+Rate.Rest.Offline.InTavernOrCity = 1
+Rate.Rest.Offline.InWilderness   = 1
 
 #
 #    Rate.Damage.Fall
@@ -1996,7 +1996,7 @@ Rate.Talent = 1
 #        Description: Reputation gain rate.
 #        Default:     1
 
-Rate.Reputation.Gain = 3
+Rate.Reputation.Gain = 1
 
 #
 #    Rate.Reputation.LowLevel.Kill
