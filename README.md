@@ -3,12 +3,12 @@
 InoCore is a fork of MoPSource/MoPCore; a variant of JadeCore/TrinityCore/MaNGOS. This fork exists because the project on which it is built upon is no longer actively developed. Any further development and improvement can be credited to those who volunteer their time to continue to develop here.
 
 ## Required Software 
-- CMake 2.8.0 +
-- ACE 5.8.3
-- MySQL 5.1 +
-- OpenSSL 1.00 +
+- CMake 2.8.0+ (3.8.0+ recommended)
+- ACE 5.8.3 (Included for Windows)
+- MySQL 5.1+ (Included for Windows)
+- OpenSSL 1.00 + (1.0.2/1.1.1 recommended)
 - GCC 4.7.2 (Linux)
-- Microsoft Visual Studio 12 (2013) +
+- Microsoft Visual Studio 12+ (VS 12 2013 recommended) 
 
 ## Authors &amp; Contributors
 
