@@ -131,7 +131,17 @@ int Master::Run()
     sLog->outInfo(LOG_FILTER_WORLDSERVER, "%s (worldserver-daemon)", _FULLVERSION);
     sLog->outInfo(LOG_FILTER_WORLDSERVER, "<Ctrl-C> to stop.\n");
 
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, "MoPCore547");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "o              .oPYo.                     ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8              8    8                     ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8 odYo. .oPYo. 8      .oPYo. oPYo. .oPYo. ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8 8' `8 8    8 8      8    8 8  `' 8oooo8 ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8 8   8 8    8 8    8 8    8 8     8.     ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8 8   8 `YooP' `YooP' `YooP' 8     `Yooo' ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "....::..:.....::.....::.....:..:::::.....:");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "::::::::::::::::::::::::::::::::::::::::::");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "------------------------------------------ ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "Based on TrinityCore, JadeCore, and MaNGOS ");
+	sLog->outInfo(LOG_FILTER_WORLDSERVER, "------------------------------------------ ");
 
     /// worldserver PID file creation
     std::string pidfile = ConfigMgr::GetStringDefault("PidFile", "");
