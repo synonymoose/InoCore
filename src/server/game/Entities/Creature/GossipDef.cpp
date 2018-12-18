@@ -621,7 +621,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << uint32(l_HiddenRewardItem ? 0 : quest->RewardItemId[3]);
     data << uint32(quest->GetBonusTalents());
     data << uint32(0);                                      // model Id
-    data << uint32(quest->GetFlags());
+	data << uint32(quest->GetFlags() & (sWorld->getBoolConfig(CONFIG_QUEST_IGNORE_AUTO_ACCEPT) ? ~QUEST_FLAGS_AUTO_ACCEPT : ~0));
     data << uint32(rewChoiceItemDisplayId[3]);
     data << uint32(l_HiddenRewardItem ? 0 : quest->RewardChoiceItemCount[4]);
 

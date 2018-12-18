@@ -980,8 +980,10 @@ Quests.IgnoreRaid = 0
 #        Default:     0 - (Disabled, DB values determine if quest is marked auto accept or not.)
 #                     1 - (Enabled, clients will not be told to automatically accept any quest.)
 #
-	  
-Quests.IgnoreAutoAccept = 0
+#		 Leave value as '1' (enabled) to prevent bug that causes two quest dialogs to appear.
+#				  
+
+Quests.IgnoreAutoAccept = 1
 
 #
 #    Quests.IgnoreAutoComplete
