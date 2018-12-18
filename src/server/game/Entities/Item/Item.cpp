@@ -728,29 +728,33 @@ void Item::UpdateItemSuffixFactor()
 
 void Item::SetState(ItemUpdateState state, Player* forplayer)
 {
-    if (uState == ITEM_NEW && state == ITEM_REMOVED)
-    {
-        // pretend the item never existed
-        RemoveFromUpdateQueueOf(forplayer);
-        forplayer->DeleteRefundReference(GetGUIDLow());
-        delete this;
-        return;
-    }
-    if (state != ITEM_UNCHANGED)
-    {
-        // new items must stay in new state until saved
-        if (uState != ITEM_NEW)
-            uState = state;
+	if (uState == ITEM_NEW && state == ITEM_REMOVED)
+	{
+		// pretend the item never existed
+		if (forplayer)
+		{
+			RemoveFromUpdateQueueOf(forplayer);
+			forplayer->DeleteRefundReference(GetGUIDLow());
+		}
+		delete this;
+		return;
+	}
+	if (state != ITEM_UNCHANGED)
+	{
+		// new items must stay in new state until saved
+		if (uState != ITEM_NEW)
+			uState = state;
 
-        AddToUpdateQueueOf(forplayer);
-    }
-    else
-    {
-        // unset in queue
-        // the item must be removed from the queue manually
-        uQueuePos = -1;
-        uState = ITEM_UNCHANGED;
-    }
+		if (forplayer)
+			AddToUpdateQueueOf(forplayer);
+	}
+	else
+	{
+		// unset in queue
+		// the item must be removed from the queue manually
+		uQueuePos = -1;
+		uState = ITEM_UNCHANGED;
+	}
 }
 
 void Item::AddToUpdateQueueOf(Player* player)
