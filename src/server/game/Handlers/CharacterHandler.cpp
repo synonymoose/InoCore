@@ -877,7 +877,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
     playerLoginCounter++;
     if (playerLoginCounter > 10)
     {
-        sLog->OutPandashan("Player kicked due to flood of CMSG_PLAYER_LOGIN");
+        sLog->OutTrinity("Player kicked due to flood of CMSG_PLAYER_LOGIN");
         KickPlayer();
     }
     
@@ -1355,7 +1355,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder, PreparedQueryResu
 
     uint32 totalTime = getMSTime() - time;
     if (totalTime > 70)
-        sLog->OutPandashan("HandlePlayerLogin |****---> time1 : %u | time 2 : %u | time 3 : %u | time 4 : %u | time 5: %u | time 6 : %u | time 7 : %u | time 8 : %u | time 9 : %u | totaltime : %u", time1, time2, time3, time4, time5, time6, time7, time8, time9, totalTime);
+        sLog->OutTrinity("HandlePlayerLogin |****---> time1 : %u | time 2 : %u | time 3 : %u | time 4 : %u | time 5: %u | time 6 : %u | time 7 : %u | time 8 : %u | time 9 : %u | totaltime : %u", time1, time2, time3, time4, time5, time6, time7, time8, time9, totalTime);
 
     // this part need for handle restored characters via web
     if (!sWorld->GetCharacterInfo(pCurrChar->GetGUIDLow()))

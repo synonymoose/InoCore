@@ -21,8 +21,8 @@
 #include "SpellScript.h"
 #include "SpellMgr.h"
 
-#define MEASURE_TIME_VOID(function, script, name, step, ...) uint32 _time = getMSTime(); function(__VA_ARGS__); _time = getMSTime() - _time; if (_time > step) sLog->OutPandashan("%s of %u take more than %u ms to execute - %u ms", name, script->GetId(), step, _time);
-#define MEASURE_TIME(function, script, name, step, result, ...) uint32 _time = getMSTime(); result = function(__VA_ARGS__); _time = getMSTime() - _time; if (_time > step) sLog->OutPandashan("%s of %u take more than %u ms to execute - %u ms", name, script->GetId(), step, _time);
+#define MEASURE_TIME_VOID(function, script, name, step, ...) uint32 _time = getMSTime(); function(__VA_ARGS__); _time = getMSTime() - _time; if (_time > step) sLog->OutTrinity("%s of %u take more than %u ms to execute - %u ms", name, script->GetId(), step, _time);
+#define MEASURE_TIME(function, script, name, step, result, ...) uint32 _time = getMSTime(); result = function(__VA_ARGS__); _time = getMSTime() - _time; if (_time > step) sLog->OutTrinity("%s of %u take more than %u ms to execute - %u ms", name, script->GetId(), step, _time);
 
 #define MEASURE_AURA_VOID(function, name, step, ...) MEASURE_TIME_VOID(function, auraScript, name, step, __VA_ARGS__)
 #define MEASURE_AURA(function, name, step, result, ...) MEASURE_TIME(function, auraScript, name, step, result, __VA_ARGS__)

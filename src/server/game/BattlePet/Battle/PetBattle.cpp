@@ -1039,7 +1039,7 @@ void BattlePet::Battle::InitialBattle()
 {
     if (IsStarted())
     {
-        sLog->OutPandashan("BattlePet::Battle:StartBattle error! Trying to start battle, but battle already started");
+        sLog->OutTrinity("BattlePet::Battle:StartBattle error! Trying to start battle, but battle already started");
         return;
     }
 

@@ -1171,11 +1171,11 @@ class npc_lorewalker_cho : public CreatureScript
                         // Previous boss not done
                         if (!pInstance->CheckRequiredBosses(DATA_ELEGON))
                         {
-                            sLog->OutPandashan("===== ACTION_ELEGON_GOB_ACTIVATION FAIL =====");
-                            sLog->OutPandashan("CheckRequiredBosses fail, player in raid : ");
+                            sLog->OutTrinity("===== ACTION_ELEGON_GOB_ACTIVATION FAIL =====");
+                            sLog->OutTrinity("CheckRequiredBosses fail, player in raid : ");
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                                sLog->OutPandashan("Player[%u] : %s", itr->getSource()->GetGUIDLow(), itr->getSource()->GetName());
-                            sLog->OutPandashan("=============================================");
+                                sLog->OutTrinity("Player[%u] : %s", itr->getSource()->GetGUIDLow(), itr->getSource()->GetName());
+                            sLog->OutTrinity("=============================================");
                             break;
                         }
                         else

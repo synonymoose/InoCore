@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2012-2014 JadeCore <http://pandashan.com>
+* Copyright (C) 2013-2016 JadeCore <https://www.jadecore.tk/>
 * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
 * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
 *

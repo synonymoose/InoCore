@@ -2885,7 +2885,7 @@ void SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask, in
             else if (PowerType < MAX_POWERS) // Else drain all power
                 m_powerCost[POWER_TO_INDEX(PowerType)] = caster->GetPower(Powers(PowerType));
             else
-                sLog->OutPandashan("SpellInfo::CalcPowerCost: Unknown power type [%u] with spell [%u]", PowerType, Id);
+                sLog->OutTrinity("SpellInfo::CalcPowerCost: Unknown power type [%u] with spell [%u]", PowerType, Id);
         }
     }
 
@@ -2946,7 +2946,7 @@ void SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask, in
                 sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "CalculateManaCost: Not implemented yet!");
                 break;
             default:
-                sLog->OutPandashan("SpellInfo::CalcPowerCost: Unknown power type [%u] with spell [%u]", PowerType, Id);
+                sLog->OutTrinity("SpellInfo::CalcPowerCost: Unknown power type [%u] with spell [%u]", PowerType, Id);
                 break;
             }
         }

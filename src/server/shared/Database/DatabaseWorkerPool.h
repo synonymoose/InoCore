@@ -418,7 +418,7 @@ class DatabaseWorkerPool
                         l_Str += "[" + std::to_string(++l_I) + "]" + l_Elem.element.query + "\n\n";
                     }
 
-                    sLog->OutPandashan("Transaction failed\n==================================================\n%s\n==================================================", l_Str.c_str());
+                    sLog->OutTrinity("Transaction failed\n==================================================\n%s\n==================================================", l_Str.c_str());
                 }
             }
 

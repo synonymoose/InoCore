@@ -2388,7 +2388,7 @@ void WorldSession::HandleRequestHotfix(WorldPacket& p_RecvData)
                 break;
             }
             default:
-                //sLog->OutPandashan("HandleRequestHotfix: Unknown hotfix type %u, entry %u", l_Type, l_Entry);
+                //sLog->OutTrinity("HandleRequestHotfix: Unknown hotfix type %u, entry %u", l_Type, l_Entry);
                 break;
         }
     }

@@ -734,7 +734,7 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
 
     // Log damage > 1 000 000 on worldboss
     if (damage > 1000000 && GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT && victim->ToCreature()->GetCreatureTemplate()->rank)
-        sLog->OutPandashan("World Boss %u [%s] take more than 1M damage (%u) by player %u [%s] with spell %u", victim->GetEntry(), victim->GetName(), damage, GetGUIDLow(), GetName(), spellProto ? spellProto->Id : 0);
+        sLog->OutTrinity("World Boss %u [%s] take more than 1M damage (%u) by player %u [%s] with spell %u", victim->GetEntry(), victim->GetName(), damage, GetGUIDLow(), GetName(), spellProto ? spellProto->Id : 0);
 
     // need for operations with Player class
     Player* plr = victim->ToPlayer();
@@ -5344,7 +5344,7 @@ bool Unit::HasAura(uint32 spellId, uint64 casterGUID, uint64 itemCasterGUID, uin
 {
     if (this == nullptr)
     {
-        sLog->OutPandashan("Unit::HasAura(spellId: %u) this == nullptr", spellId);
+        sLog->OutTrinity("Unit::HasAura(spellId: %u) this == nullptr", spellId);
         return false;
     }
 
@@ -23221,7 +23221,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId)
         // if (!spellEntry) should be checked at npc_spellclick load
         if (!spellEntry)
         {
-            sLog->OutPandashan("HandleSpellClick: spellEntry pointer is NULL!!");
+            sLog->OutTrinity("HandleSpellClick: spellEntry pointer is NULL!!");
             return false;
         }
 

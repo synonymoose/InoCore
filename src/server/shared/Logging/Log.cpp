@@ -34,16 +34,16 @@ Log::Log() : worker(NULL)
     SetRealmID(0);
     m_logsTimestamp = "_" + GetTimestampStr();
     LoadFromConfig();
-    pandashanLog = fopen("pandashan.log", "a");
+    trinityLog = fopen("trinity.log", "a");
 }
 
 Log::~Log()
 {
     Close();
 
-    fclose(pandashanLog);
-    delete pandashanLog;
-    pandashanLog = NULL;
+    fclose(trinityLog);
+    delete trinityLog;
+    trinityLog = NULL;
 }
 
 uint8 Log::NextAppenderId()
@@ -565,7 +565,7 @@ void Log::outArena(const char * str, ...)
     log->str = query;*/
 }
 
-void Log::OutPandashan(const char* str, ...)
+void Log::OutTrinity(const char* str, ...)
 {
     if (!str)
         return;
@@ -578,6 +578,6 @@ void Log::OutPandashan(const char* str, ...)
     va_end(ap);
 
     std::string date = GetTimestampStr();
-    fprintf(pandashanLog, "[%s] Pandashan LOG : %s\n", date.c_str(), result);
-    fflush(pandashanLog);
+    fprintf(trinityLog, "[%s] Trinity LOG : %s\n", date.c_str(), result);
+    fflush(trinityLog);
 }
