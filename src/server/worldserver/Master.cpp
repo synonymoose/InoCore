@@ -128,6 +128,9 @@ int Master::Run()
     BigNumber seed1;
     seed1.SetRand(16 * 8);
 
+    sLog->outInfo(LOG_FILTER_WORLDSERVER, "%s (worldserver-daemon)", _FULLVERSION);
+    sLog->outInfo(LOG_FILTER_WORLDSERVER, "<Ctrl-C> to stop.\n");
+
 	sLog->outInfo(LOG_FILTER_WORLDSERVER, "o              .oPYo.                     ");
 	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8              8    8                     ");
 	sLog->outInfo(LOG_FILTER_WORLDSERVER, "8 odYo. .oPYo. 8      .oPYo. oPYo. .oPYo. ");
