@@ -402,20 +402,15 @@ void WorldSession::HandleQuestgiverQueryQuestOpcode(WorldPacket& recvData)
         {
             if (quest->IsAutoAccept())
             {
-				if (Creature* pQuestGiver = ObjectAccessor::GetCreature(*_player, guid))
-				{
-					if (pQuestGiver->IsAIEnabled)
-						sScriptMgr->OnQuestAccept(_player, pQuestGiver, quest);
-					//pQuestGiver->SendCloseGossip
-					//_player->PlayerTalkClass->SendCloseGossip();
-				}
+                if (Creature* pQuestGiver = ObjectAccessor::GetCreature(*_player, guid))
+                    if (pQuestGiver->IsAIEnabled)
+                        sScriptMgr->OnQuestAccept(_player, pQuestGiver, quest);
 
                 _player->AddQuest(quest, object);
                 if (_player->CanCompleteQuest(questId))
                     _player->CompleteQuest(questId);
             }
-            _player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, object->GetGUID(), false);
-			//_player->PlayerTalkClass->SendCloseGossip();
+            _player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, object->GetGUID(), true);
         }
     }
 }
@@ -532,7 +527,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
                                 _player->CompleteQuest(nextQuest->GetQuestId());
                         }
 
-                        _player->PlayerTalkClass->SendQuestGiverQuestDetails(nextQuest, guid, false);
+                        _player->PlayerTalkClass->SendQuestGiverQuestDetails(nextQuest, guid, true);
                     }
                     if (creatureQGiver)
                         creatureQGiver->AI()->sQuestReward(_player, quest, reward);
@@ -552,7 +547,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
                             _player->CompleteQuest(nextQuest->GetQuestId());
                     }
 
-                    _player->PlayerTalkClass->SendQuestGiverQuestDetails(nextQuest, guid, false);
+                    _player->PlayerTalkClass->SendQuestGiverQuestDetails(nextQuest, guid, true);
                 }
 
                 object->ToGameObject()->AI()->QuestReward(_player, quest, reward);
@@ -816,7 +811,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                     continue;
                 }
 
-                player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, _player->GetGUID(), false);
+                player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, _player->GetGUID(), true);
                 player->SetDivider(_player->GetGUID());
             }
         }

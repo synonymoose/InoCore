@@ -45,8 +45,7 @@ class instance_pursuing_the_black_harvest : public InstanceMapScript
                 m_Scenario.SendScenarioState(who);
             }
 
-            // unused
-            /*void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature)
             {
                 switch (creature->GetEntry())
                 {
@@ -62,7 +61,7 @@ class instance_pursuing_the_black_harvest : public InstanceMapScript
                     default: 
                         break;
                 }
-            }*/
+            }
 
 		    void SetData(uint32 type, uint32 data)
             {
@@ -105,13 +104,13 @@ class instance_pursuing_the_black_harvest : public InstanceMapScript
 
             uint64 GetData64(uint32 type)
             {
-                /*switch (type)
+                switch (type)
                 {
                     
                     default:
                         break;
                 }
-                */
+
                 return 0;
             }
 

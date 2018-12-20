@@ -842,7 +842,7 @@ enum TrinityStrings
     LANG_LIST_MAIL_INFO_3               = 1154,
     LANG_LIST_MAIL_INFO_ITEM            = 1155,
     LANG_LIST_MAIL_NOT_FOUND            = 1156,
-    LANG_AHBOT_RELOAD_OK                = 1157,
+	LANG_AHBOT_RELOAD_OK                = 1157,
     LANG_AHBOT_STATUS_BAR_CONSOLE       = 1158,
     LANG_AHBOT_STATUS_MIDBAR_CONSOLE    = 1159,
     LANG_AHBOT_STATUS_TITLE1_CONSOLE    = 1160,
@@ -862,7 +862,7 @@ enum TrinityStrings
     LANG_AHBOT_QUALITY_YELLOW           = 1174,
     LANG_AHBOT_ITEMS_AMOUNT             = 1175,
     LANG_AHBOT_ITEMS_RATIO              = 1176,
-    // Room for more level 3              1177-1199 not used
+    // Room for more level 3              1157-1199 not used
 
     // Debug commands
     LANG_CINEMATIC_NOT_EXIST            = 1200,

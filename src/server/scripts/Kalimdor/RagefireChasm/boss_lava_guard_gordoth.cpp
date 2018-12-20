@@ -1,3 +1,4 @@
+
 #include "ScriptPCH.h"
 #include "ragefire_chasm.h"
 
@@ -11,11 +12,8 @@ enum Spells
 enum Events
 {
     EVENT_GROUND_RUPTURE    = 1,
-    EVENT_SEISMIC_SLAM      = 2
+    EVENT_SEISMIC_SLAM,
 };
-
-Position XorenthPos = {-327.424f, 220.4f, -20.381f, 3.56417f};
-Position XorenthCenterPos = {-347.99f, 210.165f, -21.785f, 3.52412f};
 
 class boss_lava_guard_gordoth : public CreatureScript
 {
@@ -57,8 +55,8 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            events.ScheduleEvent(EVENT_GROUND_RUPTURE, urand(5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS));
-            events.ScheduleEvent(EVENT_SEISMIC_SLAM, urand(7 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
+            events.ScheduleEvent(EVENT_GROUND_RUPTURE, urand(5000, 7000));
+            events.ScheduleEvent(EVENT_SEISMIC_SLAM, urand(7000, 10000));
 
             DoZoneInCombat();
             instance->SetBossState(DATA_LAVA_GUARD_GORDOTH, IN_PROGRESS);
@@ -67,21 +65,8 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             _JustDied();
-            me->SummonCreature(NPC_INVOKER_XORENTH, XorenthPos);
-            instance->DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, 11520, 1, 0, me);
-        }
 
-        void JustSummoned(Creature* summon)
-        {
-            summons.Summon(summon);
-            switch (summon->GetEntry())
-            {
-                case NPC_INVOKER_XORENTH:
-                    summon->GetMotionMaster()->MovePoint(0, XorenthCenterPos);
-                    return;
-                 default:
-                    break;
-            }
+            instance->DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, 11520, 1, 0, me);
         }
 
         void UpdateAI(const uint32 diff)
@@ -107,11 +92,11 @@ public:
                 {
                     case EVENT_GROUND_RUPTURE:
                         DoCastVictim(SPELL_GROUND_RUPTURE);
-                        events.ScheduleEvent(EVENT_GROUND_RUPTURE, urand(7 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
+                        events.ScheduleEvent(EVENT_GROUND_RUPTURE, urand(7000, 10000));
                         break;
                     case EVENT_SEISMIC_SLAM:
                         DoCast(me, SPELL_SEISMIC_SLAM);
-                        events.ScheduleEvent(EVENT_SEISMIC_SLAM, urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
+                        events.ScheduleEvent(EVENT_SEISMIC_SLAM, urand(10000, 15000));
                         break;
                 }
             }
