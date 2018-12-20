@@ -1,5 +1,3 @@
-
-
 #ifndef DEF_RAGEFIRE_CHASM_H
 #define DEF_RAGEFIRE_CHASM_H
 

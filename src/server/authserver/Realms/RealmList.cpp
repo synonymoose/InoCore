@@ -99,20 +99,4 @@ void RealmList::UpdateRealms(bool init)
         }
         while (result->NextRow());
     }
-
-    QueryResult firewalls = LoginDatabase.PQuery("SELECT ip FROM firewall_farms WHERE type = 0"); // Type 0 = worldserver protection
-    if (firewalls)
-    {
-      m_firewallFarms.clear();
-      m_firewallFarms.resize(firewalls->GetRowCount());
-      uint32 count = 0;
-
-      do
-      {
-        Field* fields = firewalls->Fetch();
-        m_firewallFarms[count] = fields[0].GetCString();
-        count++;
-      }
-      while (firewalls->NextRow());
-    }
 }

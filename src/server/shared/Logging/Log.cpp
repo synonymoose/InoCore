@@ -34,7 +34,7 @@ Log::Log() : worker(NULL)
     SetRealmID(0);
     m_logsTimestamp = "_" + GetTimestampStr();
     LoadFromConfig();
-    trinityLog = fopen("trinity.log", "a");
+    trinityLog = fopen("jadecore.log", "a");
 }
 
 Log::~Log()
@@ -578,6 +578,6 @@ void Log::OutTrinity(const char* str, ...)
     va_end(ap);
 
     std::string date = GetTimestampStr();
-    fprintf(trinityLog, "[%s] Trinity LOG : %s\n", date.c_str(), result);
+    fprintf(trinityLog, "[%s] JadeCore LOG : %s\n", date.c_str(), result);
     fflush(trinityLog);
 }

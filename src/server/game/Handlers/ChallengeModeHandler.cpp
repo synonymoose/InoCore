@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2013-2016 JadeCore <https://www.jadecore.tk/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
