@@ -2,12 +2,6 @@
 #include "ScriptMgr.h"
 #include "Config.h"
 
-enum DuelSpectateMode
-{
-    SpectateDisabled = 0,
-    SpectateEnabled = 1,
-};
-
 class duel_reset : public PlayerScript
 {
     public:
@@ -15,11 +9,11 @@ class duel_reset : public PlayerScript
         
         void OnDuelEnd(Player* winner, Player* looser, DuelCompleteType type)
         {
-            if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_FINISH))
+           // if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_FINISH))
             {
-                if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR))
+                //if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR))
                 {
-                    if (winner->GetZoneId() == 14 || winner->GetZoneId() == 12)
+                    //if (winner->GetZoneId() == 14 || winner->GetZoneId() == 12)
                     {
                         if (type == DUEL_WON)
                         {
@@ -38,7 +32,7 @@ class duel_reset : public PlayerScript
                         winner->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
                     }
                 }
-                else
+                //else
                 {
                     if (type == DUEL_WON)
                     {
@@ -61,18 +55,18 @@ class duel_reset : public PlayerScript
 
         void OnDuelStart(Player* player1, Player* player2)
         {
-            if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_START))
+          //  if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_START))
             {
-                if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR))
+               // if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR))
                 {
-                    if (player1->GetZoneId() == 14 || player1->GetZoneId() == 12)
+                    //if (player1->GetZoneId() == 14 || player1->GetZoneId() == 12)
                     {
                         player1->RemoveArenaSpellCooldowns();
                         player2->RemoveArenaSpellCooldowns();
                         player1->SetHealth(player1->GetMaxHealth());
                         player2->SetHealth(player2->GetMaxHealth());
 
-                        if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_RESET_ENERGY_ON_START))
+                      //  if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_RESET_ENERGY_ON_START))
                         {
                             switch (player1->getPowerType())
                             {
@@ -117,7 +111,7 @@ class duel_reset : public PlayerScript
                             }
                         }
 
-                        if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START))
+                        //if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START))
                         {
                             switch (player1->getPowerType())
                             {
@@ -199,14 +193,14 @@ class duel_reset : public PlayerScript
                         }
                     }
                 }
-                else
+                //else
                 {
                     player1->RemoveArenaSpellCooldowns();
                     player2->RemoveArenaSpellCooldowns();
                     player1->SetHealth(player1->GetMaxHealth());
                     player2->SetHealth(player2->GetMaxHealth());
 
-                    if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START))
+                    //if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START))
                     {
                         switch (player1->getPowerType())
                         {

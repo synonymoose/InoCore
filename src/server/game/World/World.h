@@ -93,7 +93,7 @@ enum WorldTimers
     WUPDATE_AUTOBROADCAST,
     WUPDATE_MAILBOXQUEUE,
     WUPDATE_DELETECHARS,
-	WUPDATE_AHBOT,
+    WUPDATE_AHBOT,
     WUPDATE_PINGDB,
     WUPDATE_GUILDSAVE,
     WUPDATE_COUNT
@@ -207,7 +207,6 @@ enum WorldBoolConfigs
     CONFIG_VIP_EXCHANGE_ARENA_COMMAND,
     CONFIG_VIP_EXCHANGE_FROST_COMMAND,
     CONFIG_ANTISPAM_ENABLED,
-    CONFIG_DISABLE_RESTART,
     CONFIG_SHARE_MOUNTS,
     CONFIG_INSTANT_GLYPH_ENCHANT,
     CONFIG_DONT_TAKE_REAGENTS,
@@ -408,7 +407,6 @@ enum WorldIntConfigs
     CONFIG_VIP_RATE_EXHANGE_TRIUMPH_IN_FROST,
     CONFIG_ANTISPAM_MAIL_TIMER,
     CONFIG_ANTISPAM_MAIL_COUNT,
-    CONFIG_AUTO_SERVER_RESTART_HOUR,
     CONFIG_SERVER_DELAY_SAVE_TIME,
     CONFIG_PET_BATTLE_LEVEL_DIFF,
     CONFIG_RAID_ENCOUNTERS_RESET_DAYS,
@@ -419,7 +417,7 @@ enum WorldIntConfigs
     CONFIG_SKILL_CHANCE_YELLOW_LIMIT,
     CONFIG_SKILL_CHANCE_GREEN_LIMIT,
     CONFIG_SKILL_CHANCE_GREY_LIMIT,
-	CONFIG_AHBOT_UPDATE_INTERVAL,
+    CONFIG_AHBOT_UPDATE_INTERVAL,
     INT_CONFIG_VALUE_COUNT
 };
 
@@ -600,7 +598,6 @@ enum WorldStates
     WS_WEEKLY_QUEST_RESET_TIME              = 20002,    ///< Next weekly reset time
     WS_BG_DAILY_RESET_TIME                  = 20003,    ///< Next daily BG reset time
     WS_MONTHLY_QUEST_RESET_TIME             = 20004,    ///< Next monthly reset time
-    WS_AUTO_SERVER_RESTART_TIME             = 20005,    ///< Next server restart time
     WS_RAID_ENCOUNTERS_RESET_TIME           = 20006,    ///< Next raid instances reset time
     WS_WEEKLY_GUILD_CHALLENGES_RESET_TIME   = 20007,    ///< Next guild challenges reset time
     WS_WEEKLY_BOSS_LOOTED_RESET_TIME        = 20008     ///< Next weekly boss looted reset time
@@ -948,7 +945,6 @@ class World
         void InitWeeklyQuestResetTime();
         void InitMonthlyQuestResetTime();
         void InitRandomBGResetTime();
-        void InitServerAutoRestartTime();
         void InitCurrencyResetTime();
         void InitRaidEncountersResetTime();
         void InitGuildChallengesResetTime();
@@ -957,7 +953,6 @@ class World
         void ResetWeeklyQuests();
         void ResetMonthlyQuests();
         void ResetRandomBG();
-        void AutoRestartServer();
     private:
         InterRealmSession *m_InterRealmSession;
         static std::atomic<bool> m_stopEvent;
@@ -1029,7 +1024,6 @@ class World
         time_t m_NextCurrencyReset;
         time_t m_NextGuildChallengesReset;
         time_t m_NextBossLootedReset;
-        time_t m_NextServerRestart;
 
         //Player Queue
         Queue m_QueuedPlayer;

@@ -24,98 +24,80 @@
 ## npc_lazy_peon
 ######*/
 
-enum LazyPeonData
+enum LazyPeonYells
 {
-    //Spells
-    SPELL_PEON_SLEEPING = 17743,
-    SPELL_AWAKEN_PEON   = 19938,
-    //Gameobject
-    GO_LUMBERPILE       = 175784,
-    //Quest
+    SAY_SPELL_HIT = -1000600 // Ow! OK, I''ll get back to work, $N!'
+};
+
+enum LazyPeon
+{
     QUEST_LAZY_PEONS    = 25134,
-    //Events
-    EVENT_AWAKEN_PEON   = 1,
-    EVENT_IN_POINT,
-    EVENT_HOME,
-    EVENT_PEON_SLEEPING,
-    //Point
-    POINT_1             = 1
+    GO_LUMBERPILE       = 175784,
+    SPELL_BUFF_SLEEP    = 17743,
+    SPELL_AWAKEN_PEON   = 19938
 };
 
 class npc_lazy_peon : public CreatureScript
 {
-    public:
-        npc_lazy_peon() : CreatureScript("npc_lazy_peon") { }
+public:
+    npc_lazy_peon() : CreatureScript("npc_lazy_peon") { }
 
-        struct npc_lazy_peonAI : public ScriptedAI
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_lazy_peonAI(creature);
+    }
+
+    struct npc_lazy_peonAI : public ScriptedAI
+    {
+        npc_lazy_peonAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint64 PlayerGUID;
+
+        uint32 RebuffTimer;
+        bool work;
+
+        void Reset()
         {
-            npc_lazy_peonAI(Creature* creature) : ScriptedAI(creature) { }
-
-            void Reset()
-            {
-                events.Reset();
-                events.ScheduleEvent(EVENT_PEON_SLEEPING, 1000);
-            }
-
-            void MovementInform(uint32 /*type*/, uint32 id)
-            {
-                if (id == POINT_1)
-                    events.ScheduleEvent(EVENT_IN_POINT, 1000);
-            }
-
-            void SpellHit(Unit* caster, const SpellInfo* spell)
-            {
-                if (spell->Id == SPELL_AWAKEN_PEON && caster->GetTypeId() == TYPEID_PLAYER && CAST_PLR(caster)->GetQuestStatus(QUEST_LAZY_PEONS) == QUEST_STATUS_INCOMPLETE)
-                {
-                    caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
-                    events.ScheduleEvent(EVENT_AWAKEN_PEON, 500);
-                    events.CancelEvent(EVENT_PEON_SLEEPING);
-                }
-            }
-
-            void UpdateAI(uint32 const diff)
-            {
-                events.Update(diff);
-
-                while (uint32 eventId = events.ExecuteEvent())
-                {
-                    switch (eventId)
-                    {
-                        case EVENT_AWAKEN_PEON:
-                            me->RemoveAllAuras();
-                            Talk(urand(0, 3));
-                            if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
-                                me->GetMotionMaster()->MovePoint(POINT_1, Lumberpile->GetPositionX() - 1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
-                            break;
-                        case EVENT_IN_POINT:
-                            me->HandleEmoteCommand(EMOTE_STATE_WORK_CHOPWOOD);
-                            events.ScheduleEvent(EVENT_HOME, 300000);
-                            break;
-                        case EVENT_HOME:
-                            me->HandleEmoteCommand(EMOTE_STATE_NONE);
-                            me->GetMotionMaster()->MoveTargetedHome();
-                            events.ScheduleEvent(EVENT_PEON_SLEEPING, 1000);
-                            break;
-                        case EVENT_PEON_SLEEPING:
-                            DoCast(SPELL_PEON_SLEEPING);
-                            events.ScheduleEvent(EVENT_PEON_SLEEPING, 120000);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                DoMeleeAttackIfReady();
-            }
-
-            private:
-                EventMap events;
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new npc_lazy_peonAI(creature);
+            PlayerGUID = 0;
+            RebuffTimer = 0;
+            work = false;
         }
+
+        void MovementInform(uint32 /*type*/, uint32 id)
+        {
+            if (id == 1)
+                work = true;
+        }
+
+        void SpellHit(Unit* caster, const SpellInfo* spell)
+        {
+            if (spell->Id == SPELL_AWAKEN_PEON && caster->GetTypeId() == TYPEID_PLAYER
+                && CAST_PLR(caster)->GetQuestStatus(QUEST_LAZY_PEONS) == QUEST_STATUS_INCOMPLETE)
+            {
+                caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
+                DoScriptText(SAY_SPELL_HIT, me, caster);
+                me->RemoveAllAuras();
+                if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
+                    me->GetMotionMaster()->MovePoint(1, Lumberpile->GetPositionX()-1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
+            }
+        }
+
+        void UpdateAI(const uint32 Diff)
+        {
+            if (work == true)
+                me->HandleEmoteCommand(EMOTE_ONESHOT_WORK_CHOPWOOD);
+            if (RebuffTimer <= Diff)
+            {
+                DoCast(me, SPELL_BUFF_SLEEP);
+                RebuffTimer = 300000; //Rebuff agian in 5 minutes
+            }
+            else
+                RebuffTimer -= Diff;
+            if (!UpdateVictim())
+                return;
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 enum VoodooSpells

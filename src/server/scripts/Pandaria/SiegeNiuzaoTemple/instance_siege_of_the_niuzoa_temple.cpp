@@ -59,7 +59,7 @@ class instance_siege_of_the_niuzao_temple : public InstanceMapScript
 
                 m_CreatureKilled = 0;
 
-                if (instance->IsChallengeMode())
+                if (instance->GetDifficulty() == CHALLENGE_MODE_DIFFICULTY)
                     LoadScenariosInfos(g_BossScenarios, eScenarioDatas::ScenarioID);
 
                 LoadDoorData(g_DoorData);

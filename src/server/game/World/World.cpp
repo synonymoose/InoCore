@@ -1288,12 +1288,6 @@ void World::LoadConfigSettings(bool reload)
     // Max instances per hour
     m_int_configs[CONFIG_MAX_INSTANCES_PER_HOUR] = ConfigMgr::GetIntDefault("AccountInstancesPerHour", 5);
 
-    m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] = ConfigMgr::GetIntDefault("Server.Auto.RestartHour", 4);
-    if (m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] > 23)
-    {
-        m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] = 4;
-    }
-
     // AutoBroadcast
     m_bool_configs[CONFIG_AUTOBROADCAST] = ConfigMgr::GetBoolDefault("AutoBroadcast.On", false);
     m_int_configs[CONFIG_AUTOBROADCAST_CENTER] = ConfigMgr::GetIntDefault("AutoBroadcast.Center", 0);
@@ -1334,7 +1328,7 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
 
 	// AHBot
-	m_int_configs[CONFIG_AHBOT_UPDATE_INTERVAL] = ConfigMgr::GetIntDefault("AuctionHouseBot.Update.Interval", 20);
+    m_int_configs[CONFIG_AHBOT_UPDATE_INTERVAL] = ConfigMgr::GetIntDefault("AuctionHouseBot.Update.Interval", 20);
 
     // call ScriptMgr if we're reloading the configuration
     m_bool_configs[CONFIG_WINTERGRASP_ENABLE] = ConfigMgr::GetBoolDefault("Wintergrasp.Enable", false);
@@ -1374,8 +1368,6 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_ANNOUNCE_BAN] = ConfigMgr::GetBoolDefault("AnnounceBan", false);
     m_bool_configs[CONFIG_ANNOUNCE_MUTE] = ConfigMgr::GetBoolDefault("AnnounceMute", false);
     m_bool_configs[CONFIG_SPELL_FORBIDDEN] = ConfigMgr::GetBoolDefault("SpellForbidden", false);
-
-    m_bool_configs[CONFIG_DISABLE_RESTART] = ConfigMgr::GetBoolDefault("DisableRestart", false);
 
     // Custom Fun
     m_bool_configs[CONFIG_SHARE_MOUNTS] = ConfigMgr::GetBoolDefault("ShareMounts", true);
@@ -1986,19 +1978,17 @@ void World::SetInitialWorldSettings()
 
     m_timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
-    m_timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);	//Update "uptime" table based on configuration entry in minutes.
-
-    m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);	//erase corpses every 20 minutes
-
-    m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS); // clean logs table every 14 days by default
-
+    m_timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);
+                                                            //Update "uptime" table based on configuration entry in minutes.
+    m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
+                                                            //erase corpses every 20 minutes
+    m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS);
+                                                            // clean logs table every 14 days by default
     m_timers[WUPDATE_AUTOBROADCAST].SetInterval(getIntConfig(CONFIG_AUTOBROADCAST_INTERVAL));
-
     m_timers[WUPDATE_DELETECHARS].SetInterval(DAY*IN_MILLISECONDS); // check for chars to delete every day
-
+    
 	// for AhBot
 	m_timers[WUPDATE_AHBOT].SetInterval(getIntConfig(CONFIG_AHBOT_UPDATE_INTERVAL) * IN_MILLISECONDS); // every 20 sec
-
 
     m_timers[WUPDATE_PINGDB].SetInterval(getIntConfig(CONFIG_DB_PING_INTERVAL)*MINUTE*IN_MILLISECONDS);    // Mysql ping time in minutes
 
@@ -2085,9 +2075,6 @@ void World::SetInitialWorldSettings()
 
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Calculate next weekly boss looted reset time...");
     InitBossLootedResetTime();
-
-    sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Calculate next auto restart time...");
-    InitServerAutoRestartTime();
 
     InitRaidEncountersResetTime();
 
@@ -2319,9 +2306,6 @@ void World::Update(uint32 diff)
     if (m_gameTime >= m_NextBossLootedReset)
         ResetBossLooted();
 
-    if (m_gameTime > m_NextServerRestart)
-        AutoRestartServer();
-
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
@@ -2340,14 +2324,13 @@ void World::Update(uint32 diff)
     }
 
     uint32 diffTime = getMSTime();
-
+    
 	/// <li> Handle AHBot operations
 	if (m_timers[WUPDATE_AHBOT].Passed())
 	{
 		sAuctionBot->Update();
 		m_timers[WUPDATE_AHBOT].Reset();
 	}
-
 
     /// <li> Handle session updates when the timer has passed
     RecordTimeDiff(NULL);
@@ -3043,11 +3026,6 @@ void World::ShutdownMsg(bool show, Player* player)
 
     if (m_ShutdownTimer == 5)
         sWorld->KickAll(); // save and kick all players
-    else if (m_ShutdownTimer == 2)
-    {
-        sLog->outError(LOG_FILTER_SERVER_LOADING, "Automatic scheduled server restart!");
-        ASSERT(false);
-    }
 }
 
 /// Cancel a planned server shutdown
@@ -3289,37 +3267,6 @@ void World::InitBossLootedResetTime()
     m_NextBossLootedReset = l_NextResetDay * 86400 + 5 * 3600;
  }
 
-void World::InitServerAutoRestartTime()
-{
-    time_t serverRestartTime = uint64(sWorld->getWorldState(WS_AUTO_SERVER_RESTART_TIME));
-    if (!serverRestartTime)
-        m_NextServerRestart = time_t(time(NULL));         // game time not yet init
-
-    // generate time by config
-    time_t curTime = time(NULL);
-    tm localTm;
-    ACE_OS::localtime_r(&curTime, &localTm);
-    localTm.tm_hour = getIntConfig(CONFIG_AUTO_SERVER_RESTART_HOUR);
-    localTm.tm_min = 0;
-    localTm.tm_sec = 0;
-
-    // current day reset time
-    time_t nextDayRestartTime = mktime(&localTm);
-
-    // next reset time before current moment
-    if (curTime >= nextDayRestartTime)
-        nextDayRestartTime += DAY;
-
-    // normalize reset time
-    m_NextServerRestart = serverRestartTime < curTime ? nextDayRestartTime - DAY : nextDayRestartTime;
-
-    if (!serverRestartTime)
-        sWorld->setWorldState(WS_AUTO_SERVER_RESTART_TIME, uint64(m_NextServerRestart));
-
-    if (m_bool_configs[CONFIG_DISABLE_RESTART])
-        m_NextServerRestart += DAY*1;
-}
-
 void World::InitRaidEncountersResetTime()
 {
     time_t resetTime = uint64(sWorld->getWorldState(WS_RAID_ENCOUNTERS_RESET_TIME));
@@ -3328,9 +3275,6 @@ void World::InitRaidEncountersResetTime()
 
     tm localTm;
     ACE_OS::localtime_r(&curTime, &localTm);
-    localTm.tm_hour = getIntConfig(CONFIG_AUTO_SERVER_RESTART_HOUR);
-    localTm.tm_min = 0;
-    localTm.tm_sec = 0;
 
     if (!resetTime)
     {
@@ -3531,16 +3475,6 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = time_t(m_NextRandomBGReset + DAY);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
-}
-
-void World::AutoRestartServer()
-{
-    sLog->outInfo(LOG_FILTER_GENERAL, "Automatic server restart.");
-
-    sWorld->ShutdownServ(120, SHUTDOWN_MASK_RESTART, RESTART_EXIT_CODE);
-
-    m_NextServerRestart = time_t(m_NextServerRestart + DAY);
-    sWorld->setWorldState(WS_AUTO_SERVER_RESTART_TIME, uint64(m_NextServerRestart));
 }
 
 void World::UpdateMaxSessionCounters()
